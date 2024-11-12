@@ -1,0 +1,235 @@
+/* Hero Section Styles */
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Space+Grotesk:wght@300..700&display=swap");
+
+.hero-section {
+  text-align: center;
+  margin-top: 120px; /* Adds spacing below the navbar */
+  padding: 2rem;
+}
+
+.main-heading {
+  font-size: 5rem; /* Increased font size */
+  font-weight: bold;
+  color: #000000; /* Black font */
+  margin-bottom: 1.5rem;
+}
+
+.subtitle {
+  font-size: 1rem; /* Smaller font size */
+  font-weight: normal;
+  color: #6c757d; /* Grayish color */
+  margin-bottom: 4rem;
+}
+
+.word {
+  display: inline-block; /* Allows for individual animations */
+  opacity: 0; /* Start hidden */
+  transform: translateY(20px); /* Start with a slight offset */
+  animation: popUp 0.5s forwards; /* Animate each word */
+}
+
+.word:nth-child(1) {
+  animation-delay: 0.2s;
+}
+.word:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.word:nth-child(3) {
+  animation-delay: 0.6s;
+}
+/* Skip the <br> element */
+.word:nth-child(4) {
+  animation-delay: 0.8s;
+}
+.word:nth-child(5) {
+  animation-delay: 1s;
+}
+
+@keyframes popUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cta-button {
+  background: linear-gradient(
+    135deg,
+    #3348e6,
+    #1b34d8
+  ); /* Gradient background */
+  color: #ffffff;
+  padding: 1rem 2rem; /* Increased padding for better button feel */
+  border: none;
+  border-radius: 12px;
+  width: 20.5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  font-family: "Bricolage Grotesque", sans-serif;
+  transition: transform 0.3s ease-in-out;
+  font-weight: 500;
+  font-size: 1.4rem;
+}
+
+.cta-button:hover {
+  transform: translateY(-3px); /* Slight lift effect */
+}
+
+.no-credit {
+  font-size: 0.84rem;
+  font-weight: normal;
+  color: #6c757d; /* Matches subtitle color */
+  margin-top: 0.5rem;
+}
+
+.fading-image-container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 4rem auto;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 5px solid transparent; /* Base border */
+  background: linear-gradient(white, white) padding-box,
+    conic-gradient(#3348e6 0% 25%, transparent 25% 100%) border-box,
+    conic-gradient(transparent 0% 75%, #3348e6 75% 100%) border-box;
+  background-origin: border-box;
+  background-clip: padding-box, border-box, border-box;
+}
+
+.fading-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 1;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1),
+    rgba(0, 0, 0, 0)
+  );
+}
+
+.circular-gradient-background {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70%; /* Adjust width for desired size */
+  height: 70%; /* Adjust height for desired size */
+  background: radial-gradient(
+    circle,
+    rgba(51, 72, 230, 0.15) 20%,
+    rgba(51, 72, 230, 0) 70%
+  );
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none; /* Keeps it non-interactive */
+  z-index: -1; /* Sends it to the background */
+  filter: blur(15px); /* Adjust the blur intensity */
+}
+
+/* COMPANY LOGOS */
+.company-logos-section {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 2rem 0;
+  position: relative;
+}
+
+.logos-heading {
+  font-size: 1.2rem;
+  margin-bottom: 1.4rem;
+  color: #6c757d; /* Adjust color as desired */
+}
+
+.logos-container {
+  display: flex;
+  justify-content: center; /* Center logos horizontally */
+  align-items: center; /* Center logos vertically if necessary */
+  gap: 2.5rem; /* Space between logos */
+}
+
+.logo {
+  display: inline-block;
+  padding: 0.5rem;
+}
+
+.logo-image {
+  height: 40px; /* Adjusted height for smaller logos */
+  width: auto; /* Maintain aspect ratio */
+  filter: grayscale(100%); /* Initially grayscale */
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.logo-image:hover {
+  filter: grayscale(0%); /* Restore original color on hover */
+}
+
+/* NEW SECTION */
+.challenge-section {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 2rem 1rem;
+  max-width: 900px; /* Slightly wider for better spacing */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.challenge-subheading {
+  font-size: 0.85rem;
+  color: #1b34d8; /* Light gray color for subtle emphasis */
+  margin-bottom: 0.5rem;
+  text-transform: uppercase; /* Add emphasis with uppercase */
+  letter-spacing: 0.05em;
+}
+
+.challenge-heading {
+  font-size: 1.8rem; /* Larger, eye-catching heading */
+  font-weight: 700;
+  margin-bottom: 2.5rem; /* More spacing below heading */
+  color: #000; /* Strong black color */
+}
+
+.challenge-points-container {
+  display: flex;
+  justify-content: space-between; /* Even spacing between elements */
+  align-items: flex-start; /* Align items for consistent visual appeal */
+  gap: 2rem; /* Increased gap for breathing room */
+  flex-wrap: wrap; /* Ensures wrapping on smaller screens */
+}
+
+.challenge-point {
+  text-align: center;
+  flex: 1;
+  max-width: 250px; /* Slightly increased max-width */
+  margin: 0 1rem; /* Margin for horizontal spacing */
+}
+
+.point-icon {
+  background: #f0ebff; /* Softer purple background for a more modern look */
+  color: #1b34d8;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem; /* Center icon with spacing below */
+}
+
+.point-description {
+  color: #555; /* Darker gray for better contrast */
+  font-size: 1rem; /* Slightly larger font for readability */
+  line-height: 1.5; /* Improved line height for text clarity */
+  margin: 0.5rem 0; /* Spacing around the text */
+}
+
+/* Vertical line styling */
+.vertical-line {
+  width: 1px;
+  background-color: #d3d3d3; /* Light gray line color */
+  height: 80px; /* Height of the line */
+  margin: 0 2rem; /* Spacing around the vertical line */
+  align-self: center; /* Center the line vertically with points */
+}
