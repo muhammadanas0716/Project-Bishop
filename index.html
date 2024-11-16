@@ -130,6 +130,32 @@
 
   </main>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const navToggle = document.querySelector('.nav-toggle');
+      const navRight = document.querySelector('.nav-right');
+
+      navToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        navRight.classList.toggle('active');
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!navRight.contains(e.target) && !navToggle.contains(e.target)) {
+          navRight.classList.remove('active');
+        }
+      });
+
+      // Close menu when clicking a nav link
+      const navLinks = document.querySelectorAll('.nav-link, .nav-button');
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          navRight.classList.remove('active');
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>
