@@ -108,7 +108,7 @@
 /* CTA Button */
 /* Base styles remain the same until CTA button */
 .cta-button {
-  background: linear-gradient(135deg, #3348e6, #1b34d8);
+  background: linear-gradient(135deg, #d87959, #c56848);
   color: #ffffff;
   padding: 1rem 2rem;
   border: none;
@@ -129,7 +129,7 @@
   content: "";
   position: absolute;
   inset: -3px;
-  background: linear-gradient(135deg, #3348e6, #1b34d8);
+  background: linear-gradient(135deg, #d87959, #c56848);
   border-radius: 14px;
   z-index: -1;
   opacity: 0.7;
@@ -140,20 +140,26 @@
   0% {
     opacity: 0.3;
     transform: scale(1);
-    box-shadow: 0 0 20px rgba(51, 72, 230, 0.3), 0 0 40px rgba(51, 72, 230, 0.2);
+    box-shadow: 0 0 20px rgba(216, 121, 89, 0.3),
+      0 0 40px rgba(216, 121, 89, 0.2);
   }
   50% {
     opacity: 1;
     transform: scale(1.02);
-    box-shadow: 0 0 25px rgba(51, 72, 230, 0.5), 0 0 50px rgba(51, 72, 230, 0.4);
+    box-shadow: 0 0 25px rgba(216, 121, 89, 0.5),
+      0 0 50px rgba(216, 121, 89, 0.4);
   }
   100% {
     opacity: 0.3;
     transform: scale(1);
-    box-shadow: 0 0 20px rgba(51, 72, 230, 0.3), 0 0 40px rgba(51, 72, 230, 0.2);
+    box-shadow: 0 0 20px rgba(216, 121, 89, 0.3),
+      0 0 40px rgba(216, 121, 89, 0.2);
   }
 }
 
+.cta-button:hover::before {
+  box-shadow: 0 0 30px rgba(216, 121, 89, 0.7), 0 0 60px rgba(216, 121, 89, 0.5);
+}
 .cta-button:hover {
   transform: translateY(-3px);
 }
@@ -192,10 +198,10 @@
   margin: 4rem auto;
   overflow: hidden;
   border-radius: 12px;
-  border: 5px solid transparent;
+  border: 2px solid transparent;
   background: linear-gradient(white, white) padding-box,
-    conic-gradient(#3348e6 0% 25%, transparent 25% 100%) border-box,
-    conic-gradient(transparent 0% 75%, #3348e6 75% 100%) border-box;
+    conic-gradient(#d87959 0% 25%, transparent 25% 100%) border-box,
+    conic-gradient(transparent 0% 75%, #d87959 75% 100%) border-box;
   background-origin: border-box;
   background-clip: padding-box, border-box, border-box;
 }
@@ -222,8 +228,8 @@
   height: 70%;
   background: radial-gradient(
     circle,
-    rgba(51, 72, 230, 0.15) 20%,
-    rgba(51, 72, 230, 0) 70%
+    rgba(216, 121, 89, 0.15) 20%,
+    rgba(216, 121, 89, 0) 70%
   );
   transform: translate(-50%, -50%);
   border-radius: 50%;
@@ -232,7 +238,6 @@
   filter: blur(15px);
 }
 
-/* Company Logos Section */
 /* Company Logos Section */
 .company-logos-section {
   width: 100%;
@@ -335,7 +340,7 @@
 
 .challenge-subheading {
   font-size: 0.85rem;
-  color: #1b34d8;
+  color: #d87959;
   margin-bottom: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -364,8 +369,8 @@
 }
 
 .point-icon {
-  background: #f0ebff;
-  color: #1b34d8;
+  background: #fdf0ec; /* Lighter version of terracotta */
+  color: #d87959;
   border-radius: 50%;
   width: 70px;
   height: 70px;
