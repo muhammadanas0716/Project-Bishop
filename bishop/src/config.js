@@ -5,7 +5,7 @@ const config = {
   },
   production: {
     API_URL:
-      process.env.REACT_APP_API_URL || "https://your-production-api.vercel.app",
+      process.env.REACT_APP_API_URL || "https://project-bishop.onrender.com",
   },
 };
 

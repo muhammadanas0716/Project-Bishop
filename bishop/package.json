@@ -16,6 +16,7 @@
     "react-router-dom": "^7.0.2",
     "react-tooltip": "^5.28.0",
     "recharts": "^2.10.3",
+    "serve": "^14.2.4",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
