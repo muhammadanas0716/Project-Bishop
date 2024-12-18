@@ -4,9 +4,7 @@ const config = {
     API_URL: "http://localhost:5001/api",
   },
   production: {
-    API_URL:
-      process.env.REACT_APP_API_URL ||
-      "https://project-bishop.onrender.com/api",
+    API_URL: "https://project-bishop.onrender.com/api",
   },
 };
 
