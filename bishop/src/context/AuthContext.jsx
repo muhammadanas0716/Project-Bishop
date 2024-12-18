@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
+import { API_URL } from "../config";
 
 // Create the AuthContext
 const AuthContext = createContext(null);
@@ -8,14 +9,11 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Backend Base URL
-  const API_BASE_URL = "https://project-bishop.onrender.com/api/auth";
-
   // Check if user is logged in on page load
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      fetch(`${API_BASE_URL}/user`, {
+      fetch(`${API_URL}/auth/user`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -40,7 +38,7 @@ export const AuthProvider = ({ children }) => {
   // Login Function
   const login = async (username, password) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/login`, {
+      const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

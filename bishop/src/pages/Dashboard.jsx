@@ -10,8 +10,7 @@ import Sidebar from "../components/Sidebar";
 import DashboardCharts from "../components/DashboardCharts";
 import TradesTable from "../components/TradesTable";
 import TradeCalendar from "../components/TradeCalendar";
-
-const API_URL = "https://project-bishop.onrender.com";
+import { API_URL } from "../config";
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
