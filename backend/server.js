@@ -15,12 +15,20 @@ const app = express();
 // CORS Middleware
 app.use(
   cors({
-    origin:
-      process.env.NODE_ENV === "production"
-        ? process.env.FRONTEND_URL
-        : ["http://localhost:3000", "http://localhost:5173"], // Allow dev URLs
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed HTTP methods
-    credentials: true, // Allow cookies and credentials
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        "http://localhost:3000", // For development
+        "http://localhost:5173", // For development (Vite)
+        "https://project-bishop-frontend.onrender.com", // Production frontend
+      ];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true); // Allow the request
+      } else {
+        callback(new Error("Not allowed by CORS")); // Reject other origins
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed methods
+    credentials: true, // Allow credentials (e.g., cookies, headers)
   })
 );
 
