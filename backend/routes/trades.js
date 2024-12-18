@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const Trade = require("../models/Trade");
-const db = require("../db");
 const auth = require("../middleware/auth");
 const mongoose = require("mongoose");
 
