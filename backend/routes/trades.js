@@ -20,81 +20,6 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-// Delete all trades (Hard Reset)
-router.delete("/reset", auth, async (req, res) => {
-  try {
-    if (!req.user || !req.user.id) {
-      console.log("No user found in request:", req.user);
-      return res.status(401).json({ message: "Authentication required" });
-    }
-
-    console.log("Starting reset process for user:", req.user.id);
-
-    // First verify the user has trades
-    const tradeCount = await Trade.countDocuments({ userId: req.user.id });
-    console.log("Current trade count for user:", tradeCount);
-
-    // Check database connection
-    console.log("Database connection state:", mongoose.connection.readyState);
-    if (mongoose.connection.readyState !== 1) {
-      console.error(
-        "Database not connected. Connection state:",
-        mongoose.connection.readyState
-      );
-      return res.status(500).json({ message: "Database connection error" });
-    }
-
-    // Log the query we're about to execute
-    console.log("Executing delete query:", { userId: req.user.id });
-
-    try {
-      const result = await Trade.deleteMany({ userId: req.user.id });
-      console.log("Delete operation result:", result);
-
-      if (!result) {
-        console.error("Delete operation returned null result");
-        return res
-          .status(500)
-          .json({ message: "Delete operation failed - null result" });
-      }
-
-      console.log("Reset successful. Deleted count:", result.deletedCount);
-
-      // Verify deletion
-      const remainingCount = await Trade.countDocuments({
-        userId: req.user.id,
-      });
-      console.log("Remaining trades after deletion:", remainingCount);
-
-      res.json({
-        message: "All trades deleted successfully",
-        deletedCount: result.deletedCount,
-        previousCount: tradeCount,
-        remainingCount,
-      });
-    } catch (dbError) {
-      console.error("Database operation error:", dbError);
-      return res.status(500).json({
-        message: "Database operation failed",
-        error: dbError.message,
-        stack: dbError.stack,
-      });
-    }
-  } catch (err) {
-    console.error("Error in reset endpoint:", err);
-    console.error("Full error details:", {
-      name: err.name,
-      message: err.message,
-      stack: err.stack,
-    });
-    res.status(500).json({
-      message: "Failed to reset trades",
-      error: err.message,
-      details: err.stack,
-    });
-  }
-});
-
 // Add new trade
 router.post("/", auth, async (req, res) => {
   try {
@@ -117,43 +42,6 @@ router.post("/", auth, async (req, res) => {
     res
       .status(400)
       .json({ message: "Failed to add trade", error: err.message });
-  }
-});
-
-// Update trade
-router.put("/:id", auth, async (req, res) => {
-  try {
-    // First check if the trade belongs to the user
-    const trade = await Trade.findOne({
-      _id: req.params.id,
-      userId: req.user.id,
-    });
-    if (!trade) {
-      return res.status(404).json({ message: "Trade not found" });
-    }
-
-    const updatedTrade = await Trade.findByIdAndUpdate(
-      req.params.id,
-      {
-        ...req.body,
-        userId: req.user.id, // Ensure userId cannot be changed
-        pnl: req.body.exitPrice
-          ? (req.body.exitPrice - req.body.entryPrice) * req.body.quantity * 100
-          : 0,
-        pnlPercent: req.body.exitPrice
-          ? ((req.body.exitPrice - req.body.entryPrice) / req.body.entryPrice) *
-            100
-          : 0,
-      },
-      { new: true }
-    );
-
-    res.json(updatedTrade);
-  } catch (err) {
-    console.error("Error updating trade:", err);
-    res
-      .status(400)
-      .json({ message: "Failed to update trade", error: err.message });
   }
 });
 
