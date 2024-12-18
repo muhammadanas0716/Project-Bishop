@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     // Check if user is logged in on page load
     const token = localStorage.getItem("token");
     if (token) {
-      fetch("http://localhost:5001/api/auth/me", {
+      fetch("https://project-bishop.onrender.com", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (username, password) => {
-    const response = await fetch("http://localhost:5001/api/auth/login", {
+    const response = await fetch("https://project-bishop.onrender.com", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

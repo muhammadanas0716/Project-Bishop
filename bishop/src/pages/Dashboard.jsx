@@ -11,7 +11,7 @@ import DashboardCharts from "../components/DashboardCharts";
 import TradesTable from "../components/TradesTable";
 import TradeCalendar from "../components/TradeCalendar";
 
-const API_URL = "http://localhost:5001/api";
+const API_URL = "https://project-bishop.onrender.com";
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
