@@ -1,7 +1,19 @@
-import React from "react";
-import { FiArrowUp, FiArrowDown } from "react-icons/fi";
+import React, { useState } from "react";
+import { FiArrowUp, FiArrowDown, FiAlertCircle } from "react-icons/fi";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 const HeaderStatistics = ({ trades }) => {
+  const [showRiskMetrics, setShowRiskMetrics] = useState(false);
+  const STARTING_BALANCE = 13791.97;
+
   // Calculate statistics from trades
   const calculateStats = () => {
     if (!trades || trades.length === 0) {
@@ -18,6 +30,7 @@ const HeaderStatistics = ({ trades }) => {
         maxDrawdown: 0,
         consecutiveWins: 0,
         consecutiveLosses: 0,
+        currentBalance: STARTING_BALANCE,
       };
     }
 
@@ -27,6 +40,7 @@ const HeaderStatistics = ({ trades }) => {
     const winRate = (winningTrades.length / totalTrades) * 100;
 
     const totalPnL = trades.reduce((sum, trade) => sum + trade.pnl, 0);
+    const currentBalance = STARTING_BALANCE + totalPnL;
     const avgPnL = totalPnL / totalTrades;
     const bestTrade = Math.max(...trades.map((trade) => trade.pnl));
     const worstTrade = Math.min(...trades.map((trade) => trade.pnl));
@@ -93,12 +107,68 @@ const HeaderStatistics = ({ trades }) => {
       maxDrawdown,
       consecutiveWins: maxWinStreak,
       consecutiveLosses: maxLossStreak,
+      currentBalance,
     };
   };
 
+  // Calculate position size recommendations
+  const getPositionSizeRecommendations = (balance) => {
+    const maxRiskPercent = 0.02; // 2% max risk
+    const baseSize = balance * maxRiskPercent;
+
+    return {
+      maxPosition: baseSize,
+      recommended: baseSize * 0.75,
+      conservative: baseSize * 0.5,
+    };
+  };
+
+  // Prepare balance history data
+  const balanceHistoryData = trades.reduce((acc, trade, index) => {
+    const prevBalance = index > 0 ? acc[index - 1].balance : STARTING_BALANCE;
+    acc.push({
+      date: new Date(trade.createdAt).toLocaleDateString(),
+      balance: prevBalance + trade.pnl,
+      change: trade.pnl,
+    });
+    return acc;
+  }, []);
+
   const stats = calculateStats();
+  const positionSizes = getPositionSizeRecommendations(stats.currentBalance);
 
   const statBoxes = [
+    {
+      label: "Account Balance",
+      value: `$${stats.currentBalance.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}`,
+      subtext: `Starting: $${STARTING_BALANCE.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}`,
+      trend: stats.currentBalance >= STARTING_BALANCE ? "up" : "down",
+      details: [
+        `P&L: $${stats.totalPnL.toFixed(2)}`,
+        `${((stats.totalPnL / STARTING_BALANCE) * 100).toFixed(1)}% return`,
+      ],
+      chart: balanceHistoryData.length > 0 && (
+        <div style={{ height: "60px", marginTop: "10px" }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={balanceHistoryData}>
+              <Line
+                type="monotone"
+                dataKey="balance"
+                stroke="#22C55E"
+                dot={false}
+                strokeWidth={1}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      ),
+    },
     {
       label: "Performance",
       value: `$${stats.totalPnL.toFixed(2)}`,
@@ -121,13 +191,22 @@ const HeaderStatistics = ({ trades }) => {
     },
     {
       label: "Risk Metrics",
-      value: stats.profitFactor.toFixed(2),
-      subtext: "Profit Factor",
-      trend: stats.profitFactor >= 1.5 ? "up" : "down",
-      details: [
-        `Max DD: $${stats.maxDrawdown.toFixed(2)}`,
-        `Risk Ratio: ${(stats.avgWinSize / stats.avgLossSize).toFixed(2)}`,
-      ],
+      value: (
+        <div
+          style={{ cursor: "pointer" }}
+          onClick={() => setShowRiskMetrics(!showRiskMetrics)}
+        >
+          <FiAlertCircle size={24} />
+        </div>
+      ),
+      subtext: "Position Sizing",
+      details: showRiskMetrics
+        ? [
+            `Max: $${positionSizes.maxPosition.toFixed(2)}`,
+            `Recommended: $${positionSizes.recommended.toFixed(2)}`,
+            `Conservative: $${positionSizes.conservative.toFixed(2)}`,
+          ]
+        : ["Click to view", "position sizes"],
     },
     {
       label: "Streaks",
@@ -211,6 +290,7 @@ const HeaderStatistics = ({ trades }) => {
               </div>
             ))}
           </div>
+          {stat.chart && <div style={{ marginTop: "12px" }}>{stat.chart}</div>}
         </div>
       ))}
     </div>
