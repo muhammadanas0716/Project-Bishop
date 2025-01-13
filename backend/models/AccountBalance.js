@@ -38,7 +38,7 @@ const accountBalanceSchema = new mongoose.Schema(
     startingBalance: {
       type: Number,
       required: true,
-      default: 13791.97,
+      default: 13495.13,
     },
     balanceHistory: [balanceHistorySchema],
     riskSettings: {

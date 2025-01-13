@@ -12,7 +12,7 @@ import {
 
 const HeaderStatistics = ({ trades }) => {
   const [showRiskMetrics, setShowRiskMetrics] = useState(false);
-  const STARTING_BALANCE = 13791.97;
+  const STARTING_BALANCE = 13495.13;
 
   // Calculate statistics from trades
   const calculateStats = () => {
