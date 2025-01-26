@@ -7,7 +7,6 @@ import {
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import Balance from "./pages/Balance";
 import "./styles/global.css";
 import "./styles/datepicker.css";
 
@@ -38,14 +37,6 @@ function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/balance"
-            element={
-              <ProtectedRoute>
-                <Balance />
               </ProtectedRoute>
             }
           />

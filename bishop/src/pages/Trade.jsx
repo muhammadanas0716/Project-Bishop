@@ -3,130 +3,154 @@ import {
   FiDollarSign,
   FiCreditCard,
   FiCheckCircle,
-  FiAlertCircle,
+  FiTrendingUp,
 } from "react-icons/fi";
-import { getAccountBalances } from "../services/tradierService";
+import { getAccountBalances, getPositions } from "../services/tradierService";
 
 const Trade = () => {
   const [accountData, setAccountData] = useState(null);
+  const [positions, setPositions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchAccountData();
+    fetchData();
   }, []);
 
-  const fetchAccountData = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
-      const balances = await getAccountBalances();
-      setAccountData({
-        totalValue: balances.total_equity,
-        availableFunds:
-          balances.cash?.cash_available || balances.option_buying_power,
-        settledFunds:
-          balances.total_cash - (balances.cash?.unsettled_funds || 0),
-      });
+      const [balances, positionsData] = await Promise.all([
+        getAccountBalances(),
+        getPositions(),
+      ]);
+
+      setAccountData(balances);
+      setPositions(positionsData?.position || []);
       setError(null);
     } catch (err) {
-      console.error("Error fetching account data:", err);
-      setError("Failed to load account data. Please try again later.");
+      console.error("Error fetching data:", err);
+      setError("Failed to load data. Please try again later.");
     } finally {
       setLoading(false);
     }
   };
 
-  const balanceCards = [
-    {
-      label: "Total Value",
-      value: accountData?.totalValue || 0,
-      icon: <FiDollarSign size={24} />,
-      color: "#22C55E",
-    },
-    {
-      label: "Available Funds",
-      value: accountData?.availableFunds || 0,
-      icon: <FiCreditCard size={24} />,
-      color: "#3B82F6",
-    },
-    {
-      label: "Settled Funds",
-      value: accountData?.settledFunds || 0,
-      icon: <FiCheckCircle size={24} />,
-      color: "#8B5CF6",
-    },
-  ];
-
   if (loading) {
-    return (
-      <div className="p-6">
-        <div className="flex items-center justify-center min-h-[200px]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-          <span className="ml-3 text-white">Loading account data...</span>
-        </div>
-      </div>
-    );
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return (
-      <div className="p-6">
-        <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6 flex items-center">
-          <FiAlertCircle className="text-red-500 mr-3" size={24} />
-          <span className="text-red-500">{error}</span>
-        </div>
-      </div>
-    );
+    return <div className="text-red-500">{error}</div>;
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-6 text-white">Trade</h1>
-
-      {/* Balance Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {balanceCards.map((card, index) => (
-          <div
-            key={index}
-            className="bg-[#141414] rounded-xl p-6 border border-[#2a2a2a]"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-gray-400 text-sm">{card.label}</span>
-              <div
-                className="w-10 h-10 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: `${card.color}15` }}
-              >
-                <div style={{ color: card.color }}>{card.icon}</div>
+    <div className="space-y-6">
+      {/* Balance Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="bg-[#141414] p-4 rounded-lg">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-gray-400">Total Equity</div>
+              <div className="text-xl font-semibold">
+                ${accountData?.total_equity?.toFixed(2) || "0.00"}
               </div>
             </div>
-            <div className="text-2xl font-semibold text-white">
-              $
-              {card.value.toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
-            </div>
+            <FiDollarSign className="text-green-500" size={20} />
           </div>
-        ))}
+        </div>
+
+        <div className="bg-[#141414] p-4 rounded-lg">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-gray-400">Available Cash</div>
+              <div className="text-xl font-semibold">
+                ${accountData?.cash?.cash_available?.toFixed(2) || "0.00"}
+              </div>
+            </div>
+            <FiCreditCard className="text-blue-500" size={20} />
+          </div>
+        </div>
+
+        <div className="bg-[#141414] p-4 rounded-lg">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-gray-400">Market Value</div>
+              <div className="text-xl font-semibold">
+                ${accountData?.market_value?.toFixed(2) || "0.00"}
+              </div>
+            </div>
+            <FiTrendingUp className="text-yellow-500" size={20} />
+          </div>
+        </div>
       </div>
 
-      {/* Trading Interface */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Order Form */}
-        <div className="bg-[#141414] rounded-xl p-6 border border-[#2a2a2a]">
-          <h2 className="text-lg font-semibold mb-4 text-white">Place Order</h2>
-          {/* Order form will go here */}
-          <div className="text-gray-400 text-sm">Order form coming soon...</div>
-        </div>
-
-        {/* Positions */}
-        <div className="bg-[#141414] rounded-xl p-6 border border-[#2a2a2a] lg:col-span-2">
-          <h2 className="text-lg font-semibold mb-4 text-white">Positions</h2>
-          {/* Positions table will go here */}
-          <div className="text-gray-400 text-sm">
-            Positions table coming soon...
+      {/* Positions */}
+      <div className="bg-[#141414] p-4 rounded-lg">
+        <h2 className="text-lg mb-4">Positions</h2>
+        {positions.length === 0 ? (
+          <div className="text-gray-400">No open positions</div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="text-left text-gray-400">
+                  <th className="pb-2">Symbol</th>
+                  <th className="pb-2">Quantity</th>
+                  <th className="pb-2">Cost Basis</th>
+                  <th className="pb-2">Current Price</th>
+                  <th className="pb-2">Market Value</th>
+                  <th className="pb-2">P/L</th>
+                </tr>
+              </thead>
+              <tbody>
+                {positions.map((position, index) => (
+                  <tr key={index}>
+                    <td className="py-2">{position.symbol}</td>
+                    <td className="py-2">{position.quantity}</td>
+                    <td className="py-2">${position.cost_basis}</td>
+                    <td className="py-2">${position.last_price}</td>
+                    <td className="py-2">${position.market_value}</td>
+                    <td
+                      className={
+                        position.profit_loss >= 0
+                          ? "text-green-500"
+                          : "text-red-500"
+                      }
+                    >
+                      ${position.profit_loss}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </div>
+        )}
+      </div>
+
+      {/* Quick Trade */}
+      <div className="bg-[#141414] p-4 rounded-lg">
+        <h2 className="text-lg mb-4">Quick Trade</h2>
+        <form className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <input
+            type="text"
+            placeholder="Symbol"
+            className="bg-[#1a1a1a] p-2 rounded"
+          />
+          <input
+            type="number"
+            placeholder="Quantity"
+            className="bg-[#1a1a1a] p-2 rounded"
+          />
+          <select className="bg-[#1a1a1a] p-2 rounded">
+            <option value="market">Market</option>
+            <option value="limit">Limit</option>
+            <option value="stop">Stop</option>
+          </select>
+          <button type="submit" className="bg-green-500 text-black p-2 rounded">
+            Place Order
+          </button>
+        </form>
       </div>
     </div>
   );

@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 const Trade = require("../models/Trade");
 
-// MongoDB connection string
+// Mx3ongoDB connection string
 const MONGODB_URI = "mongodb://localhost:27017/bishop";
 
 // Sample trade data
 const sampleTrades = [
   {
     ticker: "AAPL",
-    optionType: "Call",
+    optionTyxxpe: "Call",
     expDate: new Date("2024-03-15"),
     entryPrice: 3.45,
     exitPrice: 5.2,

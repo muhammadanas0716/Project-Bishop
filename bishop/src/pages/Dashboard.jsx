@@ -159,7 +159,11 @@ const Dashboard = () => {
           </div>
         );
       case "trade":
-        return <Trade />;
+        return (
+          <div className="space-y-6">
+            <Trade />
+          </div>
+        );
       case "analysis":
         return <TradeAnalysis trades={trades} />;
       default:
