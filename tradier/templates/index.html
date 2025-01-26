@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Account Balance</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Tradier Account Balance</h1>
+    {% if error %}
+    <p class="error">{{ error }}</p>
+    {% else %}
+    <table>
+      <tr>
+        <th>Metric</th>
+        <th>Value</th>
+      </tr>
+      <tr>
+        <td>Total Equity</td>
+        <td>${{ balances.get('total_equity', 'N/A') }}</td>
+      </tr>
+      <tr>
+        <td>Cash Available</td>
+        <td>${{ balances.get('cash', {}).get('cash_available', 'N/A') }}</td>
+      </tr>
+      <tr>
+        <td>Open P/L</td>
+        <td>${{ balances.get('open_pl', 'N/A') }}</td>
+      </tr>
+      <!-- Add more metrics as needed -->
+    </table>
+    {% endif %}
+  </div>
+</body>
+
+</html>

@@ -10,6 +10,7 @@ import Sidebar from "../components/Sidebar";
 import DashboardCharts from "../components/DashboardCharts";
 import TradesTable from "../components/TradesTable";
 import TradeCalendar from "../components/TradeCalendar";
+import Trade from "../pages/Trade";
 import { API_URL } from "../config";
 
 const Dashboard = () => {
@@ -157,6 +158,8 @@ const Dashboard = () => {
             />
           </div>
         );
+      case "trade":
+        return <Trade />;
       case "analysis":
         return <TradeAnalysis trades={trades} />;
       default:

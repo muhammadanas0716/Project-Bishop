@@ -9,6 +9,7 @@ import {
   FiChevronLeft,
   FiChevronRight,
   FiLogOut,
+  FiDollarSign,
 } from "react-icons/fi";
 
 const Sidebar = ({
@@ -25,6 +26,11 @@ const Sidebar = ({
       icon: <FiHome size={20} />,
       label: "Dashboard",
       view: "dashboard",
+    },
+    {
+      icon: <FiDollarSign size={20} />,
+      label: "Trade",
+      view: "trade",
     },
     {
       icon: <FiBarChart2 size={20} />,
